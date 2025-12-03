@@ -10,11 +10,9 @@ var _items: Dictionary = {}
 var _eventbus_adapter: EventBusAdapter
 
 func _ready():
-	# Ensure there is only one instance
-	if get_tree().get_nodes_in_group("item_manager").size() > 0:
-		queue_free()
+	# Ensure singleton pattern
+	if not ManagerBase.ensure_singleton_for(self, "item_manager"):
 		return
-	add_to_group("item_manager")
 	
 	# Initialize adapter
 	_eventbus_adapter = EventBusAdapter.new()
