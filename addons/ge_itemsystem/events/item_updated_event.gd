@@ -16,7 +16,7 @@ func _init(p_item_id: String = "", p_item: Item = null, p_changed_properties: Ar
 	super._init()
 	item_id = p_item_id
 	item = p_item
-	changed_properties = p_changed_properties.duplicate()
+	changed_properties.assign(p_changed_properties)
 
 func validate() -> bool:
 	return not item_id.is_empty() and item != null
