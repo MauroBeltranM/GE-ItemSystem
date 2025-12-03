@@ -1,7 +1,7 @@
 ## Event published when an item is deleted.
-## Compatible with EventBus through EventCompatible base class.
+## Compatible with EventBus through BaseEvent base class.
 class_name ItemDeletedEvent
-extends EventCompatible
+extends BaseEvent
 
 ## ID of the deleted item
 var item_id: String
@@ -12,3 +12,6 @@ func _init(p_item_id: String = ""):
 
 func validate() -> bool:
 	return not item_id.is_empty()
+
+func _to_string() -> String:
+	return "[ItemDeletedEvent: %s]" % item_id

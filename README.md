@@ -2,6 +2,26 @@
 
 Agnostic item system for Godot 4.x with extensible properties, persistence, and event integration.
 
+## Quick Start
+
+1. Copy `addons/ge_itemsystem/` to your project's `addons/` folder
+2. Enable the plugin: Project > Project Settings > Plugins > GE ItemSystem > Enable
+3. Done! `ItemManager` is now available as an autoload singleton
+
+```gdscript
+# Create and register an item
+var sword = Item.new("sword_001", "Iron Sword", "A basic sword")
+sword.set_property("attack", 10)
+ItemManager.register_item(sword)
+
+# Get item
+var item = ItemManager.get_item("sword_001")
+```
+
+### Optional Integrations
+- **Events**: Install GE-EventBus for event-driven updates (ItemCreatedEvent, etc.)
+- **Persistence**: Install GE-PersistenceSystem for save/load support
+
 ## Description
 
 GE-ItemSystem is a pure data item management system designed to be completely agnostic and reusable. Items are data-only (no executable behavior) - behavior like "use", "equip", or "consume" belongs to external systems (InventorySystem, EquipmentSystem, etc.).

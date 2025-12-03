@@ -1,7 +1,7 @@
 ## Event published when an item is updated.
-## Compatible with EventBus through EventCompatible base class.
+## Compatible with EventBus through BaseEvent base class.
 class_name ItemUpdatedEvent
-extends EventCompatible
+extends BaseEvent
 
 ## ID of the updated item
 var item_id: String
@@ -20,3 +20,6 @@ func _init(p_item_id: String = "", p_item: Item = null, p_changed_properties: Ar
 
 func validate() -> bool:
 	return not item_id.is_empty() and item != null
+
+func _to_string() -> String:
+	return "[ItemUpdatedEvent: %s (%d properties)]" % [item_id, changed_properties.size()]
