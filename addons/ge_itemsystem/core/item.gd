@@ -32,7 +32,7 @@ func _init(p_item_id: String = "", p_name: String = "", p_description: String = 
 	description = p_description
 	item_type = p_item_type
 	properties = {}
-	created_at = Time.get_ticks_msec() / 1000.0
+	created_at = TimeHelper.get_timestamp()
 	updated_at = created_at
 
 ## Sets a custom property
@@ -43,7 +43,7 @@ func set_property(key: String, value: Variant) -> void:
 		push_warning("Item: Attempt to set property with empty key")
 		return
 	properties[key] = value
-	updated_at = Time.get_ticks_msec() / 1000.0
+	updated_at = TimeHelper.get_timestamp()
 
 ## Gets a custom property
 ## @param key: Property key
@@ -67,7 +67,7 @@ func remove_property(key: String) -> bool:
 	if not properties.has(key):
 		return false
 	properties.erase(key)
-	updated_at = Time.get_ticks_msec() / 1000.0
+	updated_at = TimeHelper.get_timestamp()
 	return true
 
 ## Gets all properties
@@ -150,7 +150,7 @@ func from_dict(data: Dictionary) -> bool:
 	else:
 		properties = {}
 	
-	created_at = data.get("created_at", Time.get_ticks_msec() / 1000.0) as float
+	created_at = data.get("created_at", TimeHelper.get_timestamp()) as float
 	updated_at = data.get("updated_at", created_at) as float
 	
 	return true

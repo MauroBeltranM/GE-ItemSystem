@@ -12,24 +12,28 @@ extends PersistenceAdapter
 
 const CURRENT_VERSION: int = 1
 
-## Reference to ItemManager (if available)
+## Reference to ItemManager (lazy initialized)
 var _item_manager: Node = null
 
-func _init():
-	_item_manager = PersistenceAdapter.find_manager("ItemManager")
+## Gets the ItemManager instance (lazy initialization)
+func _get_manager() -> Node:
+	if _item_manager == null:
+		_item_manager = ManagerBase.find_manager("ItemManager")
+	return _item_manager
 
 ## Serializes all items to a Dictionary
 ## @return: Dictionary with serialized item data
 func serialize() -> Dictionary:
-	if _item_manager == null:
+	var manager: Node = _get_manager()
+	if manager == null:
 		push_warning("ItemSystemPersistenceAdapter: ItemManager not available")
 		return {}
 	
-	if not _item_manager.has_method("get_all_items"):
+	if not manager.has_method("get_all_items"):
 		push_warning("ItemSystemPersistenceAdapter: ItemManager does not have get_all_items() method")
 		return {}
 	
-	var items: Array[Item] = _item_manager.get_all_items()
+	var items: Array[Item] = manager.get_all_items()
 	var data: Dictionary = {
 		"version": CURRENT_VERSION,
 		"items": []
@@ -45,7 +49,8 @@ func serialize() -> Dictionary:
 ## @param data: Dictionary with serialized item data
 ## @return: true if deserialization was successful
 func deserialize(data: Dictionary) -> bool:
-	if _item_manager == null:
+	var manager: Node = _get_manager()
+	if manager == null:
 		push_warning("ItemSystemPersistenceAdapter: ItemManager not available")
 		return false
 	
@@ -69,8 +74,8 @@ func deserialize(data: Dictionary) -> bool:
 		var item: Item = Item.new()
 		
 		if item.from_dict(item_data):
-			if _item_manager.has_method("register_item"):
-				if _item_manager.register_item(item):
+			if manager.has_method("register_item"):
+				if manager.register_item(item):
 					loaded_count += 1
 			else:
 				push_warning("ItemSystemPersistenceAdapter: ItemManager does not have register_item() method")
@@ -92,4 +97,3 @@ func validate_data(data: Dictionary) -> bool:
 	if not data.has("items") or not data["items"] is Array:
 		return false
 	return true
-
